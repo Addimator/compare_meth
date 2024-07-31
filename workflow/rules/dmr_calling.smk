@@ -81,6 +81,7 @@ rule plot_dmrs:
         report(
             "results/dmr_calls/{group2}/plots/dmr_qval.0.05.pdf",
             category="DMR plots",
+            subcategory="Plots for single samples",
             labels=lambda wildcards: {
                 "experiment 1": config["ref_sample"],
                 "experiment 2": wildcards.group2,

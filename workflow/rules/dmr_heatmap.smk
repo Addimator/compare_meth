@@ -16,7 +16,12 @@ rule create_heatmap:
             sample=["BC02", "BC03", "BC04"],
         ),
     output:
-        "results/dmr_calls/heatmap.png",
+        report(
+            "results/dmr_calls/heatmap.png",
+            category="DMR plots",
+            subcategory="Plots between samples",
+            labels={"Name": "DMR heatmap"},
+        ),
     conda:
         "../envs/plot.yaml"
     script:

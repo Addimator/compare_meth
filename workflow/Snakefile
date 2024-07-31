@@ -36,6 +36,13 @@ chromosome_conf = config["sample"]
 
 rule all:
     input:
+        "results/dmr_calls/heatmap.png",
+        # regulations=expand(
+        #     "results/dmr_calls/{group2}_annotated_regulations.tsv",
+        #     group2=[
+        #         sample for sample in samples.keys() if sample != config["ref_sample"]
+        #     ],
+        # ),
         alignments=expand("results/{sample}/calls.vcf", sample=list(samples.keys())),
         dmr_plots=expand(
             "results/dmr_calls/{group2}/plots/dmr_qval.0.05.pdf",
@@ -55,12 +62,6 @@ rule all:
                 sample for sample in samples.keys() if sample != config["ref_sample"]
             ],
         ),
-        # regulations=expand(
-        #     "results/dmr_calls/{group2}_annotated_regulations.tsv",
-        #     group2=[
-        #         sample for sample in samples.keys() if sample != config["ref_sample"]
-        #     ],
-        # ),
 
 
 rule find_candidates:
