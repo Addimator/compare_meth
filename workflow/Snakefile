@@ -34,8 +34,28 @@ samples = read_sample_tsv(sample_tsv_path)
 chromosome_conf = config["sample"]
 
 
-rule all:
+module enrichment:
+    snakefile:
+        github(
+            "Addimator/enrichment",
+            path="workflow/Snakefile",
+            # tag="v2.5.4",
+            branch="main",
+        )
+        # "/homes/johannes/scms/rna-seq-kallisto-sleuth/workflow/Snakefile"
+        # "/home/adrian/Documents/Promotion/locotact_stuff/enrichment/workflow/Snakefile"
+    config:
+        config
+
+
+# use all rules from https://github.com/snakemake-workflows/rna-seq-kallisto-sleuth
+use rule * from enrichment
+
+
+rule modified_all:
+    default_target: True
     input:
+        rules.all.input,
         "results/dmr_calls/heatmap.png",
         # regulations=expand(
         #     "results/dmr_calls/{group2}_annotated_regulations.tsv",
@@ -62,6 +82,36 @@ rule all:
                 sample for sample in samples.keys() if sample != config["ref_sample"]
             ],
         ),
+
+
+# rule all:
+#     input:
+#         "results/dmr_calls/heatmap.png",
+#         # regulations=expand(
+#         #     "results/dmr_calls/{group2}_annotated_regulations.tsv",
+#         #     group2=[
+#         #         sample for sample in samples.keys() if sample != config["ref_sample"]
+#         #     ],
+#         # ),
+#         alignments=expand("results/{sample}/calls.vcf", sample=list(samples.keys())),
+#         dmr_plots=expand(
+#             "results/dmr_calls/{group2}/plots/dmr_qval.0.05.pdf",
+#             group2=[
+#                 sample for sample in samples.keys() if sample != config["ref_sample"]
+#             ],
+#         ),
+#         pval_plots=expand(
+#             "results/dmr_calls/{group2}/plots/pvals.png",
+#             group2=[
+#                 sample for sample in samples.keys() if sample != config["ref_sample"]
+#             ],
+#         ),
+#         datavzrd=expand(
+#             "results/datavzrd-report/{group2}",
+#             group2=[
+#                 sample for sample in samples.keys() if sample != config["ref_sample"]
+#             ],
+#         ),
 
 
 rule find_candidates:
